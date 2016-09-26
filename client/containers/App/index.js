@@ -14,6 +14,14 @@ import {List, ListItem} from 'material-ui/List'
 
 
 class App extends Component {
+
+  handleNameFieldChange(e) {
+    this.setState({name: e.target.value})
+  }
+  handleWhyFieldChange(e) {
+    this.setState({why: e.target.value})
+  }
+
   render() {
     const { dreams, actions, children } = this.props
     return (
@@ -24,39 +32,31 @@ class App extends Component {
             hintText="Name your dream, make it inspirational!"
             id="dream_name"
             fullWidth={true}
-            ref={(input) => this._input_name = input}
+            onChange={this.handleNameFieldChange.bind(this)}
           ></TextField>
           <TextField
             hintText="Why do you have this dream? Why do you want it so bad?"
             id="dream_why"
             fullWidth={true}
             multiLine={true}
-            ref={(input) => this._input_why = input}
+            onChange={this.handleWhyFieldChange.bind(this)}
           >
           </TextField>
           <FloatingActionButton
-            onClick={actions.addGoal(this._input_name, this._input_why)}
+            onClick={() => actions.addDream({
+              name: this.state.name,
+              why: this.state.why
+            })}
           >
             <div style={style.center}>
               <i className="fa fa-plus"></i>
             </div>
           </FloatingActionButton>
-
-          <List>
-            {dreams.map(function(dream) {
-              <ListItem
-                leftAvatar={<ActionGrade color={pinkA200} />}
-                primaryText={dream.name}
-                secondaryText={
-                  <p>
-                    {dream.why}
-                  </p>
-                }
-                secondaryTextLines={2}
-              />
+          <ul>
+            {dreams.map(function(dream, index) {
+              <li>{'A'} {index}</li>
             })}
-          </List>
-
+          </ul>
           {children}
 
         </div>

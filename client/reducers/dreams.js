@@ -1,19 +1,17 @@
 
 import { handleActions } from 'redux-actions'
 
-const initialState = [{
-  text: 'Use Redux',
-  completed: false,
-  id: 0
-}];
+const initialState = [];
 
 export default handleActions({
   'ADD_DREAM' (state, action) {
-    return [{
+    return [
+      ...state, {
       id: state.reduce((maxId, dream) => Math.max(dream.id, maxId), -1) + 1,
       name: action.payload.name,
       why: action.payload.why
-    }, ...state]
+      }
+    ]
   },
 
   /*'delete todo' (state, action) {
