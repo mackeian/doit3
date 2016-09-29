@@ -12,7 +12,7 @@
 - Edit/Remove activity from habit dashboard
 
 ### Release 0.3
-- Dashboard improvement
+- Dashboard improvement, nice inspirational summary
 
 ### Release 0.4
 - Edit goals, edit habits
