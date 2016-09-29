@@ -1,7 +1,23 @@
 
-# Frontend Boilerplate
+# DOIT3
 
-A boilerplate of things that mostly shouldn't exist.
+
+## TODO
+
+### Release 0.2
+- Add goals to dreams (E.g. "Run 10 km on 40min", start/end)
+- Add Goal habits to goal (E.g. "Run > 5km", 3times/week, logged as completed activity)
+- Dashboard Overview of my habits on goals & dreams. Status & next action.
+- Add activity from habit dashboard
+- Edit/Remove activity from habit dashboard
+
+### Release 0.3
+- Dashboard improvement
+
+### Release 0.4
+- Edit goals, edit habits
+- Add Goal (prioritized) milestones (E.g. "Run 5km in 20min", "Run 10km in 45 min", logged as activity)
+
 
 ## Contains
 
@@ -15,31 +31,4 @@ A boilerplate of things that mostly shouldn't exist.
 - [x] [Rucksack](http://simplaio.github.io/rucksack/docs)
 - [x] [React Router Redux](https://github.com/reactjs/react-router-redux)
 - [x] [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
-- [ ] Redux effects
-- [x] TodoMVC example
 
-## Setup
-
-```
-$ npm install
-```
-
-## Running
-
-```
-$ npm start
-```
-
-## Build
-
-```
-$ npm run build
-```
-
-## Note
-
-My personal projects have diverged from this quite a bit, I use browserify now instead etc, but feel free to use this if it fits your needs! I won't be updating it a ton for now unlesse I have time to update it to match my current workflow.
-
-# License
-
-MIT

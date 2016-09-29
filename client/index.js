@@ -4,12 +4,21 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
 import React from 'react'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 import App from './containers/App'
+import Dream from './containers/Dream'
 import configure from './store'
 
 const store = configure()
 const history = syncHistoryWithStore(browserHistory, store)
+
+store.subscribe(() => {
+  const state = store.getState()
+  localStorage.setItem('reduxState', JSON.stringify({
+     dreams: state.dreams
+  }))
+})
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 // Needed for onTouchTap
@@ -18,10 +27,13 @@ injectTapEventPlugin();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
-      <Route path="/" component={App}>
-      </Route>
-    </Router>
+    <MuiThemeProvider>
+      <Router history={history}>
+        <Route path="/" component={App} />
+        <Route path="/dreams/:dreamId/" component={Dream} />
+
+      </Router>
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById('root')
 )

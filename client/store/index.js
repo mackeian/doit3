@@ -13,7 +13,9 @@ export default function configure(initialState) {
     logger
   )(create)
 
-  const store = createStoreWithMiddleware(rootReducer, initialState)
+  const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : {}
+
+  const store = createStoreWithMiddleware(rootReducer, persistedState)
 
   if (module.hot) {
     module.hot.accept('../reducers', () => {
