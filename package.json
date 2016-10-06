@@ -1,6 +1,6 @@
 {
-  "name": "frontend-boilerplate",
-  "version": "1.0.0",
+  "name": "Doit",
+  "version": "0.0.1",
   "private": true,
   "description": "A boilerplate of things that shouldn't exist",
   "main": "index.js",

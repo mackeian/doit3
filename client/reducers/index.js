@@ -1,11 +1,15 @@
 
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
-import todos from './todos'
 import dreams from './dreams'
+import goals from './goals'
+import goalHabits from './goal-habits'
+import habitActivities from './habit-activities'
 
 export default combineReducers({
   routing,
-  todos,
-  dreams
+  dreams,
+  goals,
+  goalHabits,
+  habitActivities
 })

@@ -16,7 +16,10 @@ const history = syncHistoryWithStore(browserHistory, store)
 store.subscribe(() => {
   const state = store.getState()
   localStorage.setItem('reduxState', JSON.stringify({
-     dreams: state.dreams
+     dreams: state.dreams,
+     goals: state.goals,
+     goalHabits: state.goalHabits,
+     habitActivities: state.habitActivitites
   }))
 })
 

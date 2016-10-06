@@ -5,8 +5,9 @@
 ## TODO
 
 ### Release 0.2
-- Add goals to dreams (E.g. "Run 10 km on 40min", start/end)
-- Add Goal habits to goal (E.g. "Run > 5km", 3times/week, logged as completed activity)
+- DONE! Add goals to dreams (E.g. "Run 10 km on 40min", start/end)
+- Add Goal habits to goal (E.g. "Run > 5km", 3times/week)
+- Add Goal Habit activity (now & date)
 - Dashboard Overview of my habits on goals & dreams. Status & next action.
 - Add activity from habit dashboard
 - Edit/Remove activity from habit dashboard

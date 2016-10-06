@@ -8,7 +8,6 @@ import { Link } from 'react-router'
 
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ActionGrade from 'material-ui/svg-icons/action/grade'
 import {pinkA200, transparent} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List'
 
