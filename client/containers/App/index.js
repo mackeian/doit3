@@ -53,7 +53,7 @@ class App extends Component {
         <ul>
         {dreams.map(dream =>
           <li key={dream.id}>
-            <Link to="{'/dreams/'+dream.id}">{dream.name}</Link><br/>
+            <Link to={'/dreams/'+dream.id}>{dream.name}</Link><br/>
             <small>
               {dream.why}
             </small>
