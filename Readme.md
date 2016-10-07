@@ -2,23 +2,28 @@
 # DOIT3
 
 
-## TODO
 
 ### Release 0.2
-- DONE! Add goals to dreams (E.g. "Run 10 km on 40min", start/end)
-- Add Goal habits to goal (E.g. "Run > 5km", 3times/week)
-- Add Goal Habit activity (now & date)
-- Dashboard Overview of my habits on goals & dreams. Status & next action.
-- Add activity from habit dashboard
-- Edit/Remove activity from habit dashboard
+- Add Goal Habit activity (now & specific date date)
+- Dashboard Overview of my habits (on on what goal (&dream)). Status e.g. (1/3) & (4/7 dgr), 3 days left. Green if 100% or progress > (4-1)/7 - Done
+  [Dream: ... | Goal: ....]
+  [HABIT COLOR + 1/3 - 3 days left (if any)]
 
 ### Release 0.3
-- Dashboard improvement, nice inspirational summary
+- Add activity from habit dashboard
+- Daily guide action - What next?
+- Edit/Remove activity from habit dashboard
 
 ### Release 0.4
+- Dashboard improvement, nice inspirational summary
+
+### Release 0.5
 - Edit goals, edit habits
 - Add Goal (prioritized) milestones (E.g. "Run 5km in 20min", "Run 10km in 45 min", logged as activity)
 
+### DONE
+- DONE! Add goals to dreams (E.g. "Run 10 km on 40min", start/end)
+- DONE! Add Goal habits to goal (E.g. "Run > 5km", 3times/week)
 
 ## Contains
 

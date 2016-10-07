@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -26,7 +25,7 @@ class Dream extends Component {
         <Link to="/">Back</Link>
         <p><i>{dream.why}</i></p>
         <hr/>
-        <AddGoal />
+        <AddGoal actions={actions} dream={dream}/>
         <GoalList goals={goals} />
 
         {children}
@@ -43,8 +42,7 @@ class GoalList extends Component {
       <ul>
         {goals.map((g) =>
           <li key={g.id}>
-            {g.name}<br/>
-            <small></small>
+            <Link to={'/goals/'+g.id+'/'}>{g.name}</Link>
           </li>
         )}
       </ul>
@@ -72,6 +70,7 @@ class AddGoal extends Component {
   }
 
   render() {
+    const { dream, actions } = this.props
     return (
       <div>
         <h2>Add goal</h2>

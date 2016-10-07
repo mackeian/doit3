@@ -7,7 +7,7 @@ export default handleActions({
   'ADD_HABIT_ACTIVITY': (state, action) => {
     return [
       ...state, {
-        id: state.reduce((maxId, activity) => Math.max(activity.id, maxId), -1) + 1,
+        id: Math.max(state.reduce((maxId, activity) => Math.max(activity.id, maxId), -1) + 1, 1),
         habitId: action.payload.habitId,
         datetime: new Date()
       }

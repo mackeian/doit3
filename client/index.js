@@ -8,6 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 import App from './containers/App'
 import Dream from './containers/Dream'
+import Goal from './containers/Goal'
 import configure from './store'
 
 const store = configure()
@@ -34,6 +35,7 @@ ReactDOM.render(
       <Router history={history}>
         <Route path="/" component={App} />
         <Route path="/dreams/:dreamId/" component={Dream} />
+        <Route path="/goals/:goalId/" component={Goal} />
 
       </Router>
     </MuiThemeProvider>

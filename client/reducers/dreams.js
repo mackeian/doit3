@@ -9,7 +9,7 @@ export default handleActions({
     [
       ...state,
       {
-        id: state.reduce((maxId, dream) => Math.max(dream.id, maxId), -1) + 1,
+        id: Math.max(state.reduce((maxId, dream) => Math.max(dream.id, maxId), -1) + 1, 1),
         name: action.payload.name,
         why: action.payload.why
       }

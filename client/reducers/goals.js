@@ -1,4 +1,3 @@
-
 import { handleActions } from 'redux-actions'
 import { addGoal } from '../actions/goals'
 
@@ -8,7 +7,7 @@ export default handleActions({
   'ADD_GOAL': (state, action) => {
     return [
       ...state, {
-        id: state.reduce((maxId, goal) => Math.max(goal.id, maxId), -1) + 1,
+        id: Math.max(state.reduce((maxId, goal) => Math.max(goal.id, maxId), -1) + 1, 1),
         name: action.payload.name,
         starts: action.payload.starts,
         ends: action.payload.ends,
