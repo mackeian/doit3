@@ -50,14 +50,15 @@ function mapStateToProps(state, props) {
    */
   const habitsData = [
     {
-      dreamName: 'My dream',
-      goalName: 'My goal',
+      dreamName: 'Healthy and fit!',
+      goalName: '10km in 40min, by 31 dec 2016',
       iterationLength: 7, // days,
       iterationCurrent: 3, // current day
       iterationPercent: 2/7, //
       timesPerIterationGoal: 3,
       timesReachedCurrent: 1,
       timesPercent: 1/3,
+      statusLevel: 4 // 1-4 Red to Green
 
     }
   ]
