@@ -25,6 +25,7 @@ class Goal extends Component {
         <ul>
           {habits.map((habit) =>
             <li key={habit.id}>
+              <Link to={'/habits/'+habit.id+'/'}>{habit.name}</Link>
               {habit.name}
               <small>- {habit.timesPerIteration} / {habit.iterationType}</small>
             </li>
@@ -37,23 +38,7 @@ class Goal extends Component {
     )
   }
 }
-/*
-class GoalList extends Component {
-  render() {
-    const { goals } = this.props
-    return (
-      <ul>
-        {goals.map((g) =>
-          <li key={g.id}>
-            {g.name}<br/>
-            <small></small>
-          </li>
-        )}
-      </ul>
-    )
-  }
-}
-*/
+
 class AddHabit extends Component {
   constructor(props) {
     super(props);
@@ -71,12 +56,12 @@ class AddHabit extends Component {
   handleNameFieldChange(e) {
     this.setState({name: e.target.value})
   }
-  handleStartsFieldChange(e) {
-    this.setState({starts: e.target.value})
+  handleStartsFieldChange(e, newDate) {
+    this.setState({starts: newDate})
   }
 
-  handleEndsFieldChange(e) {
-    this.setState({ends: e.target.value})
+  handleEndsFieldChange(e, newDate) {
+    this.setState({ends: newDate})
   }
 
   handleTimesPerIterationFieldChange(e, index, value) {

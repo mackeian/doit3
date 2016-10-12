@@ -4,10 +4,21 @@
 
 
 ### Release 0.2
-- Add Goal Habit activity (now & specific date date)
+//- Add Goal Habit activity (now & specific date date)
+//- Remove activity
 - Dashboard Overview of my habits (on on what goal (&dream)). Status e.g. (1/3) & (4/7 dgr), 3 days left. Green if 100% or progress > (4-1)/7 - Done
   [Dream: ... | Goal: ....]
   [HABIT COLOR + 1/3 - 3 days left (if any)]
+  
+  dayPercent = (currentDay-1 / totalDays)
+   daysLeft = totalDays - (currentDay - 1)
+   timesPercent = (done / goal)
+   timesLeft = goal - done
+
+   (Red:) timesLeft <= daysLeft
+   (Yellow:) timesPercent < daysPercent/2
+   (LightGreen:) timesPercent < daysPercent
+   Green: timesPercent >= daysPercent
 
 ### Release 0.3
 - Add activity from habit dashboard

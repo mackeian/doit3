@@ -13,7 +13,6 @@ import {List, ListItem} from 'material-ui/List'
 
 
 class App extends Component {
-
   handleNameFieldChange(e) {
     this.setState({name: e.target.value})
   }
@@ -53,7 +52,7 @@ class App extends Component {
         <ul>
         {dreams.map(dream =>
           <li key={dream.id}>
-            <Link to={'/dreams/'+dream.id}>{dream.name}</Link><br/>
+            <Link to={'/dreams/'+dream.id+'/'}>{dream.name}</Link><br/>
             <small>
               {dream.why}
             </small>

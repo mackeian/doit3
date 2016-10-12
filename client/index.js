@@ -9,6 +9,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import App from './containers/App'
 import Dream from './containers/Dream'
 import Goal from './containers/Goal'
+import Habit from './containers/Habit'
 import configure from './store'
 
 const store = configure()
@@ -20,7 +21,7 @@ store.subscribe(() => {
      dreams: state.dreams,
      goals: state.goals,
      goalHabits: state.goalHabits,
-     habitActivities: state.habitActivitites
+     habitActivities: state.habitActivities
   }))
 })
 
@@ -36,6 +37,7 @@ ReactDOM.render(
         <Route path="/" component={App} />
         <Route path="/dreams/:dreamId/" component={Dream} />
         <Route path="/goals/:goalId/" component={Goal} />
+        <Route path="/habits/:habitId/" components={Habit} />
 
       </Router>
     </MuiThemeProvider>
