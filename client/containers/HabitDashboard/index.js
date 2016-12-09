@@ -6,11 +6,7 @@ import { Link } from 'react-router'
 
 import {pinkA200, transparent} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List'
-import TextField from 'material-ui/TextField'
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import DatePicker from 'material-ui/DatePicker'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
+
 import { HABIT_ITERATION_DAILY, HABIT_ITERATION_WEEKLY, HABIT_ITERATION_BIWEEKLY, HABIT_ITERATION_MONTHLY } from '../../constants/constants'
 
 const HabitDashboard = ({habitsData, actions, children}) => {
@@ -62,22 +58,97 @@ function mapStateToProps(state, props) {
 
     }
   ]*/
+
   const getGoalById = (goals, goalID) => {
-    return goals.filter(g => g.ID === goalID)[0]
+    return goals.filter(g => parseInt(g.ID, 10) === goalID)[0]
   }
 
   const getDreamById = (dreams, dreamID) => {
-    return dreams.filter(d => d.ID === dreamID)[0]
+    return dreams.filter(d => parseInt(d.ID, 10) === dreamID)[0]
   }
 
   const getActivitiesForHabitId = (habitActivities, habitID) => {
-      return habitActivities.filter(a => a.habitID === habitID)
+      return habitActivities.filter(a => parseInt(a.habitID, 10)   === habitID)
+  }
+
+  const getIterationLength = (habit) => {
+    if (habit.iterationType === HABIT_ITERATION_WEEKLY) {
+      return 7;
+    }
+    throw new Exception('Not implemented:' + habit.iterationType);
+  }
+
+  const getIterationCurrent = (habit) => {
+    const SUNDAY = 0;
+    if (habit.iterationType === HABIT_ITERATION_WEEKLY) {
+      var dayOfWeek = new Date().getDay();
+      if (dayOfWeek === SUNDAY) {
+        dayOfWeek = 7;
+      }
+      return dayOfWeek;
+    }
+    throw new Exception('Not implemented:' + habit.iterationType);
+  }
+
+  const getIterationPercent = (iterationCurrent, iterationLength) => {
+    return (iterationCurrent -1) / iterationLength;
+  }
+
+  function getMonday(d) {
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
+  }
+
+  function addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+  }
+
+  const getActivitiesThisIteration = (habit, activities) => {
+    if (habit.iterationType === HABIT_ITERATION_WEEKLY) {
+      const iterationStart = getMonday(new Date());
+      const iterationEnd = addDays(iterationStart, 7);
+      const activitiesInIteration = activities.filter(a => {
+        return new Date(a.datetime) <= iterationEnd && new Date(a.datetime) >= iterationStart
+      });
+      return activitiesInIteration;
+    }
+    throw new Exception('Not implemented:' + habit.iterationType);
   }
 
   const habitsData = state.goalHabits.map((habit) => {
     const activities = getActivitiesForHabitId(state.habitActivities, habit.ID)
     const goal = getGoalById(state.goals, habit.goalID)
     const dream = getDreamById(state.dreams, goal.dreamID)
+
+    const iterationLength = getIterationLength(habit)
+    const iterationCurrent = getIterationCurrent(habit)
+    const iterationPercent = getIterationPercent(iterationCurrent, iterationLength)
+    const timesPerIterationGoal = habit.timesPerIteration
+    const numberTimesReached = getActivitiesThisIteration(habit, activities).length
+    const numberTimesPercent = numberTimesReached / timesPerIterationGoal
+    const unitLeftsInIteration = iterationLength - iterationCurrent
+
+    var level = 0;
+    if (numberTimesPercent >= iterationPercent) {
+      // Green, number times, ahead of iteration time passed
+      level = 1
+    } else if (iterationPercent > 0.50 && numberTimesPercent < iterationPercent) {
+      // Red, more than half of time passed and beyond
+      level = 3
+    } else if (numberTimesPercent < iterationPercent) {
+      // Yellow, beyond of time
+      level = 2;
+    }
+
+
+    /*
+    Grön: timesProcent <= iterationPercent (e.x. första dagen 0% (0/7) <= inget gjort 0% (0/3), ändå grön)
+   Gul: timesProcent > iterationPercent (ex andra dag 14% (1/7) < inget gjort 0% (0/3)
+   Röd: timesProcent > 50 % && iterationPercent
+     */
 
     debugger
 
@@ -86,7 +157,13 @@ function mapStateToProps(state, props) {
       habitName: habit.name,
       activities,
       goal,
-      dream
+      dream,
+      iterationLength,
+      iterationCurrent,
+      iterationPercent,
+      numberTimesPercent,
+      statusLevel: level,
+      unitLeftsInIteration
     }
   });
 

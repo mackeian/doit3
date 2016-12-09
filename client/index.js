@@ -18,8 +18,6 @@ const history = syncHistoryWithStore(browserHistory, store)
 
 store.subscribe(() => {
   const state = store.getState()
-  console.log('Current state, dreams:', state.dreams);
-  console.log('Current state, dreams JSON:', JSON.stringify(state.dreams));
   const stringifiedState = JSON.stringify({
      dreams: state.dreams,
      goals: state.goals,
@@ -27,7 +25,6 @@ store.subscribe(() => {
      habitActivities: state.habitActivities
   })
   localStorage.setItem('reduxState', stringifiedState)
-  console.log('LocalSave:', stringifiedState)
 })
 
 import injectTapEventPlugin from 'react-tap-event-plugin';

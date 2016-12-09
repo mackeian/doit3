@@ -13,7 +13,7 @@ export default function configure(initialState) {
     logger
   )(create)
 
-  const persistedState = {}; // localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : {}
+  const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : {}
   console.log(persistedState);
 
   const store = createStoreWithMiddleware(rootReducer, persistedState)
