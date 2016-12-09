@@ -19,14 +19,13 @@ class Goal extends Component {
     return (
       <div>
         <h1>{goal.name}</h1>
-        <Link to={'/dreams/'+goal.dreamId+'/'}>Back</Link>
+        <Link to={'/dreams/'+goal.dreamID+'/'}>Back</Link>
         <hr/>
         <AddHabit goal={goal} actions={actions}/>
         <ul>
           {habits.map((habit) =>
-            <li key={habit.id}>
-              <Link to={'/habits/'+habit.id+'/'}>{habit.name}</Link>
-              {habit.name}
+            <li key={habit.ID}>
+              <Link to={'/habits/'+habit.ID+'/'}>{habit.name}</Link>
               <small>- {habit.timesPerIteration} / {habit.iterationType}</small>
             </li>
           )}
@@ -111,7 +110,7 @@ class AddHabit extends Component {
         <FloatingActionButton
           onClick={() => actions.addGoalHabit({
             name: this.state.name,
-            goalId: goal.id,
+            goalID: goal.ID,
             starts: this.state.starts,
             ends: this.state.ends,
             timesPerIteration: this.state.timesPerIteration,
@@ -127,20 +126,20 @@ class AddHabit extends Component {
   }
 }
 
-const getHabitsForGoal = (habits, goalId) => {
-  return habits ? habits.filter(h => h.goalId === goalId): [];
+const getHabitsForGoal = (habits, goalID) => {
+  return habits ? habits.filter(h => h.goalID === goalID): [];
 }
 
-const getGoalFromId = (goals, goalId) => {
-  return goals.filter(g => {return g.id === goalId})[0];
+const getGoalFromId = (goals, goalID) => {
+  return goals.filter(g => {return g.ID === goalID})[0];
 }
 
 function mapStateToProps(state, props) {
-  const goalId = parseInt(props.routeParams.goalId, 10)
-  const goal = getGoalFromId(state.goals, goalId)
+  const goalID = parseInt(props.routeParams.goalID, 10)
+  const goal = getGoalFromId(state.goals, goalID)
   return {
     goal,
-    habits: getHabitsForGoal(state.goalHabits, goalId)
+    habits: getHabitsForGoal(state.goalHabits, goalID)
   }
 }
 

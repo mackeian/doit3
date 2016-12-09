@@ -11,14 +11,14 @@ import TextField from 'material-ui/TextField'
 import DatePicker from 'material-ui/DatePicker'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
-const getGoalsForDream = (goals, dreamId) => {
-  return goals.filter(g => g.dreamId === dreamId);
+const getGoalsForDream = (goals, dreamID) => {
+  return goals.filter(g => g.dreamID === dreamID);
 }
 
 class Dream extends Component {
   render() {
     const { dreams, goals, actions, params, children } = this.props
-    const dream = dreams.filter(d => {return d.id = params.dreamId})[0];
+    const dream = dreams.filter(d => {return d.ID = params.dreamID})[0];
     return (
       <div className={style.normal}>
         <h1>{dream.name}</h1>
@@ -41,8 +41,8 @@ class GoalList extends Component {
     return (
       <ul>
         {goals.map((g) =>
-          <li key={g.id}>
-            <Link to={'/goals/'+g.id+'/'}>{g.name}</Link>
+          <li key={g.ID}>
+            <Link to={'/goals/'+g.ID+'/'}>{g.name}</Link>
           </li>
         )}
       </ul>
@@ -92,7 +92,7 @@ class AddGoal extends Component {
         <FloatingActionButton
           onClick={() => actions.addGoal({
             name: this.state.name,
-            dreamId: dream.id,
+            dreamID: dream.ID,
             starts: this.state.starts,
             ends: this.state.ends
           })}
@@ -110,10 +110,10 @@ class AddGoal extends Component {
 
 
 function mapStateToProps(state, props) {
-  const dreamId = parseInt(props.routeParams.dreamId, 10)
+  const dreamID = parseInt(props.routeParams.dreamID, 10)
   return {
     dreams: state.dreams,
-    goals: getGoalsForDream(state.goals, dreamId)
+    goals: getGoalsForDream(state.goals, dreamID)
   }
 }
 

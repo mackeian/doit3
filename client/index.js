@@ -10,6 +10,7 @@ import App from './containers/App'
 import Dream from './containers/Dream'
 import Goal from './containers/Goal'
 import Habit from './containers/Habit'
+import HabitDashboard from './containers/HabitDashboard'
 import configure from './store'
 
 const store = configure()
@@ -17,12 +18,16 @@ const history = syncHistoryWithStore(browserHistory, store)
 
 store.subscribe(() => {
   const state = store.getState()
-  localStorage.setItem('reduxState', JSON.stringify({
+  console.log('Current state, dreams:', state.dreams);
+  console.log('Current state, dreams JSON:', JSON.stringify(state.dreams));
+  const stringifiedState = JSON.stringify({
      dreams: state.dreams,
      goals: state.goals,
      goalHabits: state.goalHabits,
      habitActivities: state.habitActivities
-  }))
+  })
+  localStorage.setItem('reduxState', stringifiedState)
+  console.log('LocalSave:', stringifiedState)
 })
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -35,9 +40,10 @@ ReactDOM.render(
     <MuiThemeProvider>
       <Router history={history}>
         <Route path="/" component={App} />
-        <Route path="/dreams/:dreamId/" component={Dream} />
-        <Route path="/goals/:goalId/" component={Goal} />
-        <Route path="/habits/:habitId/" components={Habit} />
+        <Route path="/dreams/:dreamID/" component={Dream} />
+        <Route path="/goals/:goalID/" component={Goal} />
+        <Route path="/habits/:habitID/" components={Habit} />
+        <Route path="/dashboard/" components={HabitDashboard} />
 
       </Router>
     </MuiThemeProvider>

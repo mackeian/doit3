@@ -51,8 +51,8 @@ class App extends Component {
         </FloatingActionButton>
         <ul>
         {dreams.map(dream =>
-          <li key={dream.id}>
-            <Link to={'/dreams/'+dream.id+'/'}>{dream.name}</Link><br/>
+          <li key={dream.ID}>
+            <Link to={'/dreams/'+dream.ID+'/'}>{dream.name}</Link><br/>
             <small>
               {dream.why}
             </small>

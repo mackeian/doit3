@@ -24,13 +24,13 @@ const areDatesOnlyEqual = (date1, date2) => {
 export default handleActions({
   'ADD_HABIT_ACTIVITY': (state, action) => {
     let shouldAdd = true
-    const habitId = action.payload.habitId
+    const habitID = action.payload.habitID
     let now = new Date()
     now.setHours(0, 0, 0, 0)
     const datetime = action.payload.datetime || now.toISOString()
 
     state.map((activity) => {
-      if (activity.habitId === habitId && areDatesOnlyEqual(activity.datetime, datetime)) {
+      if (activity.habitID === habitID && areDatesOnlyEqual(activity.datetime, datetime)) {
         shouldAdd = false
         return
       }
@@ -42,15 +42,15 @@ export default handleActions({
 
     return [
       ...state, {
-        id: Math.max(state.reduce((maxId, activity) => Math.max(activity.id, maxId), -1) + 1, 1),
-        habitId: habitId,
+        ID: Math.max(state.reduce((maxId, activity) => Math.max(activity.ID, maxId), -1) + 1, 1),
+        habitID: habitID,
         datetime: datetime
       }
     ]
   },
   'REMOVE_HABIT_ACTIVITY': (state, action) => {
     const newState = state.reduce((activities, activity) => {
-      if (activity.id !== action.id) {
+      if (activity.ID !== action.ID) {
         [...activities, activity]
       }
       return activities

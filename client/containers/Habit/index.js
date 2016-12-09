@@ -24,7 +24,7 @@ const Habit = ({habit, habitActivities, actions, children}) => {
     <h2>Activities</h2>
     <ul>
       {habitActivities.map((activity) =>
-        <li key={activity.id}>{activity.id} - {activity.datetime} <Link onClick={() => actions.removeHabitActivity({'id': activity.id})}>[REMOVE]</Link></li>
+        <li key={activity.ID}>{activity.ID} - {activity.datetime} <Link onClick={() => actions.removeHabitActivity({'ID': activity.ID})}>[REMOVE]</Link></li>
       )}
     </ul>
   </div>)
@@ -58,7 +58,7 @@ class AddActivity extends Component {
         />
         <FloatingActionButton
             onClick={() => actions.addHabitActivity({
-              habitId: habit.id,
+              habitID: habit.ID,
               datetime: this.dateToUTCdate(this.state.date).toISOString()
             })}
           >
@@ -72,20 +72,20 @@ class AddActivity extends Component {
 }
 
 
-const getActivitiesForHabit = (habitActivities, habitId) => {
-  return habitActivities ? habitActivities.filter(a => a.habitId === habitId): [];
+const getActivitiesForHabit = (habitActivities, habitID) => {
+  return habitActivities ? habitActivities.filter(a => a.habitID === habitID): [];
 }
 
-const getHabitFromId = (habits, habitId) => {
-  return habits.filter(h => {return h.id === habitId})[0];
+const getHabitFromId = (habits, habitID) => {
+  return habits.filter(h => {return h.ID === habitID})[0];
 }
 
 function mapStateToProps(state, props) {
-  const habitId = parseInt(props.routeParams.habitId, 10)
-  const habit = getHabitFromId(state.goalHabits, habitId)
+  const habitID = parseInt(props.routeParams.habitID, 10)
+  const habit = getHabitFromId(state.goalHabits, habitID)
   return {
     habit,
-    habitActivities: getActivitiesForHabit(state.habitActivities, habitId)
+    habitActivities: getActivitiesForHabit(state.habitActivities, habitID)
   }
 }
 

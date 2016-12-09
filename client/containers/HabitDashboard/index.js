@@ -17,10 +17,10 @@ const HabitDashboard = ({habitsData, actions, children}) => {
   return (<div>
     <h1>{habitsData.length} going on</h1>
     {habitsData.map((habitData) =>
-      <div>
+      <div key={habitData.habitID}>
         <hr/>
-        <h2>{habitData.name}</h2>
-        <p>{habitData.goalName} ({habitData.dreamName})</p>
+        <h2>{habitData.habitName} {habitData.activities.length}</h2>
+        <p>{habitData.goal.name} ({habitData.dream && habitData.dream.name})</p>
       </div>
     )}
 
@@ -48,7 +48,7 @@ function mapStateToProps(state, props) {
    Röd: timesProcent > 50 % && iterationPercent
 
    */
-  const habitsData = [
+  /*const habitsData = [
     {
       dreamName: 'Healthy and fit!',
       goalName: '10km in 40min, by 31 dec 2016',
@@ -61,7 +61,34 @@ function mapStateToProps(state, props) {
       statusLevel: 4 // 1-4 Red to Green
 
     }
-  ]
+  ]*/
+  const getGoalById = (goals, goalID) => {
+    return goals.filter(g => g.ID === goalID)[0]
+  }
+
+  const getDreamById = (dreams, dreamID) => {
+    return dreams.filter(d => d.ID === dreamID)[0]
+  }
+
+  const getActivitiesForHabitId = (habitActivities, habitID) => {
+      return habitActivities.filter(a => a.habitID === habitID)
+  }
+
+  const habitsData = state.goalHabits.map((habit) => {
+    const activities = getActivitiesForHabitId(state.habitActivities, habit.ID)
+    const goal = getGoalById(state.goals, habit.goalID)
+    const dream = getDreamById(state.dreams, goal.dreamID)
+
+    debugger
+
+    return {
+      habitID: habit.ID,
+      habitName: habit.name,
+      activities,
+      goal,
+      dream
+    }
+  });
 
   return {
     habitsData
@@ -77,4 +104,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Habit)
+)(HabitDashboard)
