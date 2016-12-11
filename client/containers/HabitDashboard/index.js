@@ -1,64 +1,81 @@
+const styles = require('./style.css')
+
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as habitActivityActions from '../../actions/habit-activities'
 import { Link } from 'react-router'
+import classNames from 'classnames'
 
 import {pinkA200, transparent} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List'
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import { HABIT_ITERATION_DAILY, HABIT_ITERATION_WEEKLY, HABIT_ITERATION_BIWEEKLY, HABIT_ITERATION_MONTHLY } from '../../constants/constants'
 
 const HabitDashboard = ({habitsData, actions, children}) => {
-  return (<div>
-    <h1>{habitsData.length} going on</h1>
-    {habitsData.map((habitData) =>
-      <div key={habitData.habitID}>
-        <hr/>
-        <h2>{habitData.habitName} {habitData.activities.length}</h2>
-        <p>{habitData.goal.name} ({habitData.dream && habitData.dream.name})</p>
+  const dateToUTCdate = (date) => {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+  }
+
+  const getNow = () => {
+    let now = new Date()
+    now.setHours(0, 0, 0, 0);
+    return now;
+  }
+
+  const getHabitElement = (habitData) => {
+    let habitClass
+    switch(habitData.statusLevel) {
+      case 1:
+        habitClass = styles.class1;
+        break;
+      case 2:
+        habitClass = styles.class2;
+        break;
+      case 3:
+        habitClass = styles.class3;
+        break;
+    }
+
+    return <div key={habitData.habitID}>
+        <Card className={habitClass}>
+          <CardHeader
+            title={'Habit:' + habitData.habitName}
+          >
+          </CardHeader>
+
+          <CardText>
+            {habitData.activitiesReached} out of {habitData.activitiesPerIterationGoal} this iteration.
+            <FloatingActionButton
+              onClick={() => actions.addHabitActivity({
+                habitID: habitData.habitID,
+                datetime: dateToUTCdate(getNow()).toISOString()
+              })}
+            >
+              <div>
+                <i className="fa fa-plus"></i>
+              </div>
+            </FloatingActionButton>
+            <hr/>
+            <p>Your goal: {habitData.goal.name} - ({habitData.dream && habitData.dream.name})</p>
+          </CardText>
+        </Card>
       </div>
+  }
+
+  return (<div>
+    <Link to={'/'}>Back</Link>
+    <h1>{habitsData.length} ongoing habits</h1>
+    {habitsData.map((habitData) =>
+      getHabitElement(habitData)
     )}
 
   </div>)
 };
 
 function mapStateToProps(state, props) {
-  /*
-   Dag-progress (iterationPercent)
-   Dag 7 av 7 raknas procentuellt som 6/7
-   Dag 1 av 7 raknas procentuellt som 0/7
-
-   dayPercent = (currentDay-1 / totalDays)
-   daysLeft = totalDays - (currentDay - 1)
-   timesPercent = (done / goal)
-   timesLeft = goal - done
-
-   (Red:) timesLeft <= daysLeft
-   (Yellow:) timesPercent < daysPercent/2
-   (LightGreen:) timesPercent < daysPercent
-   Green: timesPercent >= daysPercent
-
-   Grön: timesProcent <= iterationPercent (e.x. första dagen 0% (0/7) <= inget gjort 0% (0/3), ändå grön)
-   Gul: timesProcent > iterationPercent (ex andra dag 14% (1/7) < inget gjort 0% (0/3)
-   Röd: timesProcent > 50 % && iterationPercent
-
-   */
-  /*const habitsData = [
-    {
-      dreamName: 'Healthy and fit!',
-      goalName: '10km in 40min, by 31 dec 2016',
-      iterationLength: 7, // days,
-      iterationCurrent: 3, // current day
-      iterationPercent: 2/7, //
-      timesPerIterationGoal: 3,
-      timesReachedCurrent: 1,
-      timesPercent: 1/3,
-      statusLevel: 4 // 1-4 Red to Green
-
-    }
-  ]*/
-
   const getGoalById = (goals, goalID) => {
     return goals.filter(g => parseInt(g.ID, 10) === goalID)[0]
   }
@@ -78,14 +95,19 @@ function mapStateToProps(state, props) {
     throw new Exception('Not implemented:' + habit.iterationType);
   }
 
-  const getIterationCurrent = (habit) => {
-    const SUNDAY = 0;
+  const getCurrentIterationPosition = (habit) => {
+    /*
+     Where in current iteration we should count against,
+     i.e. if it's Sunday in a week iteration, we only count 6 of 7 since sunday is not done yet.
+     */
     if (habit.iterationType === HABIT_ITERATION_WEEKLY) {
+      const SUNDAY = 0;
+      const NUMBER_DAYS_TO_EXCLUDE_FROM_CURRENT = 1;
       var dayOfWeek = new Date().getDay();
       if (dayOfWeek === SUNDAY) {
         dayOfWeek = 7;
       }
-      return dayOfWeek;
+      return Math.max(0, dayOfWeek - NUMBER_DAYS_TO_EXCLUDE_FROM_CURRENT);
     }
     throw new Exception('Not implemented:' + habit.iterationType);
   }
@@ -124,33 +146,30 @@ function mapStateToProps(state, props) {
     const dream = getDreamById(state.dreams, goal.dreamID)
 
     const iterationLength = getIterationLength(habit)
-    const iterationCurrent = getIterationCurrent(habit)
-    const iterationPercent = getIterationPercent(iterationCurrent, iterationLength)
-    const timesPerIterationGoal = habit.timesPerIteration
-    const numberTimesReached = getActivitiesThisIteration(habit, activities).length
-    const numberTimesPercent = numberTimesReached / timesPerIterationGoal
-    const unitLeftsInIteration = iterationLength - iterationCurrent
+    const currentIterationPosition = getCurrentIterationPosition(habit)
+    const currentIterationPercentReached = getIterationPercent(currentIterationPosition - 1, iterationLength)
+    const activitiesPerIterationGoal = habit.timesPerIteration
+    const activitiesReached = getActivitiesThisIteration(habit, activities).length
+    const activitiesPercentReached = activitiesReached / activitiesPerIterationGoal
+    const unitLeftsInIteration = iterationLength - currentIterationPosition
 
-    var level = 0;
-    if (numberTimesPercent >= iterationPercent) {
+    var level;
+    if (activitiesPercentReached >= currentIterationPercentReached) {
       // Green, number times, ahead of iteration time passed
       level = 1
-    } else if (iterationPercent > 0.50 && numberTimesPercent < iterationPercent) {
-      // Red, more than half of time passed and beyond
+    } else if (currentIterationPercentReached > 0.50 && activitiesPercentReached < currentIterationPercentReached) {
+      // Red, more than half of time passed and behind in time
       level = 3
-    } else if (numberTimesPercent < iterationPercent) {
-      // Yellow, beyond of time
+    } else if (activitiesPercentReached < currentIterationPercentReached) {
+      // Yellow, behind in time
       level = 2;
     }
-
 
     /*
     Grön: timesProcent <= iterationPercent (e.x. första dagen 0% (0/7) <= inget gjort 0% (0/3), ändå grön)
    Gul: timesProcent > iterationPercent (ex andra dag 14% (1/7) < inget gjort 0% (0/3)
    Röd: timesProcent > 50 % && iterationPercent
      */
-
-    debugger
 
     return {
       habitID: habit.ID,
@@ -159,9 +178,11 @@ function mapStateToProps(state, props) {
       goal,
       dream,
       iterationLength,
-      iterationCurrent,
-      iterationPercent,
-      numberTimesPercent,
+      currentIterationPosition,
+      currentIterationPercentReached,
+      activitiesReached,
+      activitiesPerIterationGoal,
+      activitiesPercentReached,
       statusLevel: level,
       unitLeftsInIteration
     }

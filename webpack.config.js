@@ -31,8 +31,8 @@ module.exports = {
         include: /client/,
         loaders: [
           'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]',
-          'postcss-loader'
+          //'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]',
+          //'postcss-loader'
         ]
       },
       {
@@ -53,11 +53,11 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  postcss: [
+  /*postcss: [
     rucksack({
       autoprefixer: true
     })
-  ],
+  ],*/
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     new webpack.DefinePlugin({

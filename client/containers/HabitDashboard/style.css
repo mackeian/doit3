@@ -1,0 +1,17 @@
+.habitProgress {
+    width: 100%;
+    height: 40px;
+    background-color: red;
+}
+
+.class1 {
+    background-color: darkgreen !important;
+}
+
+.class2 {
+    background-color: darkred !important;
+}
+
+.class3 {
+    background-color: darkorange !important;
+}
