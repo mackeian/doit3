@@ -9,11 +9,15 @@
 
 ### Release 0.3
 //- Add activity from habit dashboard
-- Daily guide action - What next?
-- Edit/Remove activity from habit dashboard
+- Dashboard - Show indicators for activities on dashboard & what day to indicate
+- Dashboard - Smooth up Dashboard - Opacity down if green, nicer images.
+- Dashboard - Order by status?
+- Deploy to environment to use in mobile for testing
 
 ### Release 0.4
-- Dashboard improvement, nice inspirational summary
+- Daily guide action - What next?
+- Edit/Remove activity from habit dashboard
+- Dashboard improvement, design & nice inspirational summary
 
 ### Release 0.5
 - Edit goals, edit habits
