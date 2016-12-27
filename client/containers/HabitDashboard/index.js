@@ -167,7 +167,7 @@ function mapStateToProps(state, props) {
     const dream = getDreamById(state.dreams, goal.dreamID)
 
     const iterationLength = getIterationLength(habit)
-    const currentIterationPosition = 7 //getCurrentIterationPosition(habit)
+    const currentIterationPosition = getCurrentIterationPosition(habit)
     const currentIterationPercentReached = getIterationPercent(currentIterationPosition, iterationLength)
     const activitiesPerIterationGoal = habit.timesPerIteration
     const activitiesInIteration = getActivitiesThisIteration(habit, activities)

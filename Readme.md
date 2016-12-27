@@ -9,10 +9,11 @@
 
 ### Release 0.3
 //- Add activity from habit dashboard
-- Dashboard - Show indicators for activities on dashboard & what day to indicate
-- Dashboard - Smooth up Dashboard - Opacity down if green, nicer images.
-- Dashboard - Order by status?
+//- Dashboard - Show indicators for activities on dashboard & what day to indicate
 - Deploy to environment to use in mobile for testing
+- Dashboard - Smooth up Dashboard - Opacity down if green, nicer images.
+- Dashboard - Order habits by status?
+
 
 ### Release 0.4
 - Daily guide action - What next?
@@ -22,6 +23,9 @@
 ### Release 0.5
 - Edit goals, edit habits
 - Add Goal (prioritized) milestones (E.g. "Run 5km in 20min", "Run 10km in 45 min", logged as activity)
+
+### Release X.X
+- Check goals / progress on goals (e.g. 43 min in 10km, or 5km in (40m/10km tempo) => 50%)
 
 ### DONE
 - DONE! Add goals to dreams (E.g. "Run 10 km on 40min", start/end)
