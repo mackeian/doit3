@@ -50,8 +50,8 @@ export default handleActions({
   },
   'REMOVE_HABIT_ACTIVITY': (state, action) => {
     const newState = state.reduce((activities, activity) => {
-      if (activity.ID !== action.ID) {
-        [...activities, activity]
+      if (activity.ID !== action.payload.ID) {
+        activities = [...activities, activity]
       }
       return activities
     }, [])

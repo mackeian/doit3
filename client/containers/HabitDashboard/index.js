@@ -39,7 +39,7 @@ const HabitDashboard = ({habitsData, actions, children}) => {
         break;
     }
 
-    return <div key={habitData.habitID}>
+    return <div key={habitData.habitID} className={styles.habitProgress}>
         <Card className={habitClass}>
           <CardHeader
             title={'Habit:' + habitData.habitName}
@@ -47,19 +47,25 @@ const HabitDashboard = ({habitsData, actions, children}) => {
           </CardHeader>
 
           <CardText>
-            {habitData.activitiesReached} out of {habitData.activitiesPerIterationGoal} this iteration.
             <FloatingActionButton
               onClick={() => actions.addHabitActivity({
                 habitID: habitData.habitID,
                 datetime: dateToUTCdate(getNow()).toISOString()
               })}
+              className={styles.addActivity}
             >
               <div>
                 <i className="fa fa-plus"></i>
               </div>
             </FloatingActionButton>
+            {
+              habitData.activityIndicators.map((indicator, index) => {
+                return <FloatingActionButton key={index} disabled={!indicator.reached} secondary={indicator.exceeded} mini={true}>{indicator.label}</FloatingActionButton>
+              })
+            }
+            <p>{habitData.activitiesReached} out of {habitData.activitiesPerIterationGoal} this iteration.</p>
             <hr/>
-            <p>Your goal: {habitData.goal.name} - ({habitData.dream && habitData.dream.name})</p>
+            <p>Your goal: <strong>{habitData.goal.name} - ({habitData.dream && habitData.dream.name})</strong></p>
           </CardText>
         </Card>
       </div>
@@ -102,12 +108,11 @@ function mapStateToProps(state, props) {
      */
     if (habit.iterationType === HABIT_ITERATION_WEEKLY) {
       const SUNDAY = 0;
-      const NUMBER_DAYS_TO_EXCLUDE_FROM_CURRENT = 1;
       var dayOfWeek = new Date().getDay();
       if (dayOfWeek === SUNDAY) {
         dayOfWeek = 7;
       }
-      return Math.max(0, dayOfWeek - NUMBER_DAYS_TO_EXCLUDE_FROM_CURRENT);
+      return Math.max(0, dayOfWeek);
     }
     throw new Exception('Not implemented:' + habit.iterationType);
   }
@@ -130,8 +135,11 @@ function mapStateToProps(state, props) {
 
   const getActivitiesThisIteration = (habit, activities) => {
     if (habit.iterationType === HABIT_ITERATION_WEEKLY) {
-      const iterationStart = getMonday(new Date());
-      const iterationEnd = addDays(iterationStart, 7);
+      let iterationStart = getMonday(new Date());
+      iterationStart.setHours(0, 0, 0, 0);
+      let iterationEnd = addDays(iterationStart, 7);
+      iterationEnd.setHours(0, 0, 0, 0);
+      console.log('Getting activities between', iterationStart, iterationEnd);
       const activitiesInIteration = activities.filter(a => {
         return new Date(a.datetime) <= iterationEnd && new Date(a.datetime) >= iterationStart
       });
@@ -140,18 +148,49 @@ function mapStateToProps(state, props) {
     throw new Exception('Not implemented:' + habit.iterationType);
   }
 
+  const getWeekdayShortName = (dateString) => {
+    var date = new Date(dateString);
+    var weekday = new Array(7);
+    weekday[0] =  "Sun";
+    weekday[1] = "Mon";
+    weekday[2] = "Tue";
+    weekday[3] = "Wed";
+    weekday[4] = "Thu";
+    weekday[5] = "Fri";
+    weekday[6] = "Sat";
+    return weekday[date.getDay()];
+  }
+
   const habitsData = state.goalHabits.map((habit) => {
     const activities = getActivitiesForHabitId(state.habitActivities, habit.ID)
     const goal = getGoalById(state.goals, habit.goalID)
     const dream = getDreamById(state.dreams, goal.dreamID)
 
     const iterationLength = getIterationLength(habit)
-    const currentIterationPosition = getCurrentIterationPosition(habit)
-    const currentIterationPercentReached = getIterationPercent(currentIterationPosition - 1, iterationLength)
+    const currentIterationPosition = 7 //getCurrentIterationPosition(habit)
+    const currentIterationPercentReached = getIterationPercent(currentIterationPosition, iterationLength)
     const activitiesPerIterationGoal = habit.timesPerIteration
-    const activitiesReached = getActivitiesThisIteration(habit, activities).length
+    const activitiesInIteration = getActivitiesThisIteration(habit, activities)
+    const activitiesReached = activitiesInIteration.length
     const activitiesPercentReached = activitiesReached / activitiesPerIterationGoal
     const unitLeftsInIteration = iterationLength - currentIterationPosition
+
+    let activityIndicators = [];
+    for (var i = 1; i <= Math.max(activitiesReached, activitiesPerIterationGoal); i++) {
+      let indicator = {
+        exceeded: false,
+        reached: false,
+        label: ''
+      };
+      if (i <= activitiesReached) {
+        indicator.reached = true;
+        indicator.label = getWeekdayShortName(activitiesInIteration[i-1].datetime);
+        if (i > activitiesPerIterationGoal) {
+          indicator.exceeded = true;
+        }
+      }
+      activityIndicators.push(indicator);
+    }
 
     var level;
     if (activitiesPercentReached >= currentIterationPercentReached) {
@@ -170,7 +209,8 @@ function mapStateToProps(state, props) {
    Gul: timesProcent > iterationPercent (ex andra dag 14% (1/7) < inget gjort 0% (0/3)
    Röd: timesProcent > 50 % && iterationPercent
      */
-
+    console.log('Iteration percent:', currentIterationPercentReached);
+    console.log('Activity percent:', activitiesPercentReached);
     return {
       habitID: habit.ID,
       habitName: habit.name,
@@ -183,6 +223,7 @@ function mapStateToProps(state, props) {
       activitiesReached,
       activitiesPerIterationGoal,
       activitiesPercentReached,
+      activityIndicators,
       statusLevel: level,
       unitLeftsInIteration
     }
